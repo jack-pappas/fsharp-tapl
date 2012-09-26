@@ -126,7 +126,7 @@ let extractLineno yytext offset =
 (* The main body of the lexical analyzer *)
 
 rule main = parse
-  [' ' '\009' '\012']+     { main lexbuf }
+| [' ' '\009' '\012']+     { main lexbuf }
 
 | [' ' '\009' '\012']*("\r")?"\n" { newline lexbuf; main lexbuf }
 

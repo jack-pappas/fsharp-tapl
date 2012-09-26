@@ -7,7 +7,7 @@
 
 module Parser
 
-open Syntax
+open Ast
 
 %}
 
