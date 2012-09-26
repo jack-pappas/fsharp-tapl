@@ -41,7 +41,7 @@
     <FsYaccOutputFolder>$(IntermediateOutputPath)</FsYaccOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Syntax.fs" />
+    <Compile Include="Ast.fs" />
     <Compile Include="$(IntermediateOutputPath)\Parser.fs">
       <Visible>false</Visible>
       <Link>Parser.fs</Link>
@@ -50,25 +50,17 @@
       <Visible>false</Visible>
       <Link>Lexer.fs</Link>
     </Compile>
-    <FsYacc Include="Parser.fsy">
-      <OtherFlags>--module Parser</OtherFlags>
-    </FsYacc>
-    <FsLex Include="Lexer.fsl">
-      <OtherFlags>--unicode</OtherFlags>
-    </FsLex>
+    <None Include="Parser.fsy" />
+    <None Include="Lexer.fsl" />
     <Compile Include="Core.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FSharp.PowerPack">
-      <HintPath>C:\Program Files\FSharpPowerPack-1.9.9.9\bin\FSharp.PowerPack.dll</HintPath>
-    </Reference>
+    <Reference Include="FSharp.PowerPack, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a19089b1c74d0809" />
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\support\support.fsproj">
       <Name>support</Name>
       <Project>{15cd1fac-666f-4c5b-a4d3-b053a90ba9d2}</Project>

@@ -95,47 +95,48 @@ open Syntax
 /* The top level of a file is a sequence of commands, each terminated
    by a semicolon. */
 toplevel :
-    EOF
+  | EOF
       { [] }
   | Command SEMI toplevel
-      { let cmd = $1 in
-          let cmds = $3 in
+      {	  let cmd = $1
+          let cmds = $3
           cmd::cmds }
 
 /* A top-level command */
 Command :
   | Term 
-      { (let t = $1 in Eval(tmInfo t,t)) }
+      { (let t = $1
+			Eval (tmInfo t, t)) }
 
 Term :
-    AppTerm
+  | AppTerm
       { $1 }
   | IF Term THEN Term ELSE Term
-      { TmIf($1, $2, $4, $6) }
+      { TmIf ($1, $2, $4, $6) }
 
 AppTerm :
-    ATerm
+  | ATerm
       { $1 }
   | SUCC ATerm
-      { TmSucc($1, $2) }
+      { TmSucc ($1, $2) }
   | PRED ATerm
-      { TmPred($1, $2) }
+      { TmPred ($1, $2) }
   | ISZERO ATerm
-      { TmIsZero($1, $2) }
+      { TmIsZero ($1, $2) }
 
 /* Atomic terms are ones that never require extra parentheses */
 ATerm :
-    LPAREN Term RPAREN  
+  | LPAREN Term RPAREN  
       { $2 } 
   | TRUE
-      { TmTrue($1) }
+      { TmTrue ($1) }
   | FALSE
-      { TmFalse($1) }
+      { TmFalse ($1) }
   | INTV
-      { let rec f n = match n with
-              0 -> TmZero($1.i)
-            | n -> TmSucc($1.i, f (n-1))
-          in f $1.v }
+      { let rec f n =
+			match n with
+            | 0 -> TmZero ($1.i)
+            | n -> TmSucc ($1.i, f (n - 1))
+		f $1.v }
 
 
-/*   */

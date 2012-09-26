@@ -6,30 +6,30 @@
 open System
 open Microsoft.FSharp.Text.Lexing
 
-open Ast
-open Lexer
-open Parser
+//open Ast
+//open Lexer
+//open Parser
 
 /// Evaluate a factor
 let rec evalFactor factor =
     match factor with
-    | Float x   -> x
+    | Float x -> x
     | Integer x -> float x
     | ParenEx x -> evalExpr x
 
 /// Evaluate a term
 and evalTerm term =
     match term with
-    | Times (term, fact)  -> (evalTerm term) * (evalFactor fact)
+    | Times (term, fact) -> (evalTerm term) * (evalFactor fact)
     | Divide (term, fact) -> (evalTerm term) / (evalFactor fact)
-    | Factor fact         -> evalFactor fact
+    | Factor fact -> evalFactor fact
 
 /// Evaluate an expression
 and evalExpr expr =
     match expr with
-    | Plus (expr, term)  -> (evalExpr expr) + (evalTerm term)
+    | Plus (expr, term) -> (evalExpr expr) + (evalTerm term)
     | Minus (expr, term) -> (evalExpr expr) - (evalTerm term)
-    | Term term          -> evalTerm term
+    | Term term -> evalTerm term
 
 /// Evaluate an equation
 and evalEquation eq =
@@ -38,26 +38,26 @@ and evalEquation eq =
 
 printfn "Calculator"
 
-let rec readAndProcess() =
+let rec readAndProcess () =
     printf ":"
-    match Console.ReadLine() with
+    match Console.ReadLine () with
     | "quit" -> ()
     | expr ->
         try
             printfn "Lexing [%s]" expr
-            let lexbuff = LexBuffer<char>.FromString(expr)
+            //let lexbuff = LexBuffer<char>.FromString(expr)
             
             printfn "Parsing..."
-            let equation = Parser.start Lexer.tokenize lexbuff
+            //let equation = Parser.start Lexer.tokenize lexbuff
             
             printfn "Evaluating Equation..."
-            let result = evalEquation equation
+            //let result = evalEquation equation
             
-            printfn "Result: %s" (result.ToString())
+            //printfn "Result: %s" (result.ToString())
             
         with ex ->
             printfn "Unhandled Exception: %s" ex.Message
 
-        readAndProcess()
+        readAndProcess ()
 
-readAndProcess()
+readAndProcess ()
