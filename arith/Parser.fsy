@@ -5,7 +5,7 @@
 
 %{
 
-module Parser
+//module Parser
 
 open Ast
 
@@ -98,15 +98,15 @@ toplevel :
   | EOF
       { [] }
   | Command SEMI toplevel
-      {	  let cmd = $1
-          let cmds = $3
-          cmd::cmds }
+      {      let cmd = $1
+             let cmds = $3
+             cmd::cmds }
 
 /* A top-level command */
 Command :
   | Term 
-      { (let t = $1
-			Eval (tmInfo t, t)) }
+      { (let t = $1 in
+            Eval (tmInfo t, t)) }
 
 Term :
   | AppTerm
@@ -134,9 +134,9 @@ ATerm :
       { TmFalse ($1) }
   | INTV
       { let rec f n =
-			match n with
+            match n with
             | 0 -> TmZero ($1.i)
             | n -> TmSucc ($1.i, f (n - 1))
-		f $1.v }
+        f $1.v }
 
 

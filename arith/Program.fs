@@ -6,9 +6,9 @@
 open System
 open Microsoft.FSharp.Text.Lexing
 
-//open Ast
-//open Lexer
-//open Parser
+open Ast
+open Lexer
+open Parser
 
 /// Evaluate a factor
 let rec evalFactor factor =
@@ -45,15 +45,15 @@ let rec readAndProcess () =
     | expr ->
         try
             printfn "Lexing [%s]" expr
-            //let lexbuff = LexBuffer<char>.FromString(expr)
+            let lexbuff = LexBuffer<char>.FromString(expr)
             
             printfn "Parsing..."
-            //let equation = Parser.start Lexer.tokenize lexbuff
+            let equation = Parser.start Lexer.tokenize lexbuff
             
             printfn "Evaluating Equation..."
-            //let result = evalEquation equation
+            let result = evalEquation equation
             
-            //printfn "Result: %s" (result.ToString())
+            printfn "Result: %s" (result.ToString())
             
         with ex ->
             printfn "Unhandled Exception: %s" ex.Message

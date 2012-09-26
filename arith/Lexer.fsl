@@ -3,10 +3,10 @@ module Lexer
 open System
 open Parser
 open Microsoft.FSharp.Text.Lexing
+open Microsoft.FSharp.Compatibility.OCaml
 
 let lexeme lexbuf =
     LexBuffer<char>.LexemeString lexbuf
-}
 
 let reservedWords = [
   (* Keywords *)
@@ -66,65 +66,70 @@ do
   reservedWords
   |> List.iter symbolTable.Add
 
-let createID i str =
-  try (Hashtbl.find symbolTable str) i
-  with _ ->
-    if (String.get str 0) >= 'A' && (String.get str 0) <= 'Z' then
-       Parser.UCID {i=i;v=str}
-    else 
-       Parser.LCID {i=i;v=str}
+let createID i (str : string) =
+    match symbolTable.TryGetValue str with
+    | true, f -> f i
+    | false, _ ->
+        let c = str.[0]
+        if c >= 'A' && c <= 'Z' then
+            Parser.UCID { i = i; v = str; }
+        else 
+            Parser.LCID { i = i; v = str; }
 
-let lineno   = ref 1
-and depth    = ref 0
-and start    = ref 0
+let rec lineno = ref 1
+and depth = ref 0
+and start = ref 0
 
 and filename = ref ""
 and startLex = ref dummyinfo
 
 let create inFile stream =
-  if not (Filename.is_implicit inFile) then filename := inFile
-  else filename := Filename.concat (Sys.getcwd()) inFile;
-  lineno := 1; start := 0; Lexing.from_channel stream
+    filename :=
+        if not (Filename.is_implicit inFile) then
+            inFile
+        else
+            Filename.concat (Sys.getcwd ()) inFile
+    lineno := 1
+    start := 0
+    Lexing.from_channel stream
 
-let newline lexbuf = incr lineno; start := (Lexing.lexeme_start lexbuf)
+let newline lexbuf =
+    incr lineno
+    start := Lexing.lexeme_start lexbuf
 
 let info lexbuf =
-  createInfo (!filename) (!lineno) (Lexing.lexeme_start lexbuf - !start)
+    createInfo !filename !lineno (Lexing.lexeme_start lexbuf - !start)
 
 let text = Lexing.lexeme
 
 let stringBuffer = ref (String.create 2048)
 let stringEnd = ref 0
 
-let resetStr () = stringEnd := 0
+let resetStr () =
+    stringEnd := 0
 
 let addStr ch =
-  let x = !stringEnd in
-  let buffer = !stringBuffer
-in
-  if x = String.length buffer then
-    begin
-      let newBuffer = String.create (x*2) in
-      String.blit buffer 0 newBuffer 0 x;
-      String.set newBuffer x ch;
-      stringBuffer := newBuffer;
-      stringEnd := x+1
-    end
-  else
-    begin
-      String.set buffer x ch;
-      stringEnd := x+1
-    end
+    let x = !stringEnd
+    let buffer = !stringBuffer
 
-let getStr () = String.sub (!stringBuffer) 0 (!stringEnd)
+    if x = String.length buffer then
+        let newBuffer = String.create (x*2) in
+        String.blit buffer 0 newBuffer 0 x;
+        String.set newBuffer x ch;
+        stringBuffer := newBuffer;
+        stringEnd := x+1
+    else
+        String.set buffer x ch;
+        stringEnd := x+1
+
+let getStr () =
+    String.sub !stringBuffer 0 !stringEnd
 
 let extractLineno yytext offset =
-  int_of_string (String.sub yytext offset (String.length yytext - offset))
+    int_of_string (String.sub yytext offset (String.length yytext - offset))
+
+  (* The main body of the lexical analyzer *)
 }
-
-
-(* The main body of the lexical analyzer *)
-
 rule main = parse
 | [' ' '\009' '\012']+     { main lexbuf }
 
@@ -168,7 +173,7 @@ rule main = parse
 | _  { error (info lexbuf) "Illegal character" }
 
 and comment = parse
-  "/*"
+| "/*"
     { depth := succ !depth; comment lexbuf }
 | "*/"
     { depth := pred !depth; if !depth > 0 then comment lexbuf }
@@ -180,34 +185,34 @@ and comment = parse
     { newline lexbuf; comment lexbuf }
 
 and getFile = parse
-  " "* "\"" { getName lexbuf }
+| " "* "\"" { getName lexbuf }
 
 and getName = parse
-  [^ '"' '\n']+ { filename := (text lexbuf); finishName lexbuf }
+| [^ '"' '\n']+ { filename := (text lexbuf); finishName lexbuf }
 
 and finishName = parse
-  '"' [^ '\n']* { main lexbuf }
+| '"' [^ '\n']* { main lexbuf }
 
 and string = parse
-  '"'  { Parser.STRINGV {i = !startLex; v=getStr()} }
+| '"'  { Parser.STRINGV {i = !startLex; v=getStr()} }
 | '\\' { addStr(escaped lexbuf); string lexbuf }
 | '\n' { addStr '\n'; newline lexbuf; string lexbuf }
 | eof  { error (!startLex) "String not terminated" }
 | _    { addStr (Lexing.lexeme_char lexbuf 0); string lexbuf }
 
 and escaped = parse
-  'n'	 { '\n' }
-| 't'	 { '\t' }
-| '\\'	 { '\\' }
+| 'n'     { '\n' }
+| 't'     { '\t' }
+| '\\'     { '\\' }
 | '"'    { '\034'  }
-| '\''	 { '\'' }
+| '\''     { '\'' }
 | ['0'-'9']['0'-'9']['0'-'9']
     {
       let x = int_of_string(text lexbuf) in
       if x > 255 then
-	error (info lexbuf) "Illegal character constant"
+    error (info lexbuf) "Illegal character constant"
       else
-	Char.chr x
+    Char.chr x
     }
 | [^ '"' '\\' 't' 'n' '\'']
     { error (info lexbuf) "Illegal character constant" }

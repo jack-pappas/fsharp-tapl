@@ -1,6 +1,6 @@
 ﻿module Core
 
-open Syntax
+open Ast
 
 
 (* ------------------------   EVALUATION  ------------------------ *)
