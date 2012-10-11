@@ -1,6 +1,3 @@
-# Specific files to ignore
-/Core/BuildInfo.fs
-
 #OS junk files
 [Tt]humbs.db
 *.DS_Store
@@ -50,16 +47,10 @@ _ReSharper*/
 #Subversion files
 .svn
 
-#NuGet packages
-[Pp]ackages
+# NuGet packages
+!.nuget/*
+[Pp]ackages/*
+![Pp]ackages/repositories.config
 
 # Office Temp Files
 ~$*
-
-# Assemblies built for deployment
-[Dd]eploy*/
-
-# Installer cache files
-Installers/*-cache/
-
-/Build/BuildInfo.fs
