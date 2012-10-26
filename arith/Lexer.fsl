@@ -1,5 +1,8 @@
 ﻿{
+// TODO : Add copyright header
+
 module Lexer
+
 open System
 open Parser
 open Microsoft.FSharp.Text.Lexing
@@ -73,7 +76,7 @@ let createID i (str : string) =
         let c = str.[0]
         if c >= 'A' && c <= 'Z' then
             Parser.UCID { i = i; v = str; }
-        else 
+        else
             Parser.LCID { i = i; v = str; }
 
 let rec lineno = ref 1
@@ -91,42 +94,29 @@ let create inFile stream =
             Filename.concat (Sys.getcwd ()) inFile
     lineno := 1
     start := 0
-    Lexing.from_channel stream
+    LexBuffer<char>.FromTextReader stream
 
-let newline lexbuf =
+let newline (lexbuf : LexBuffer<char>) =
     incr lineno
-    start := Lexing.lexeme_start lexbuf
+    start := lexbuf.StartPos.pos_cnum   // Lexing.lexeme_start lexbuf
 
-let info lexbuf =
-    createInfo !filename !lineno (Lexing.lexeme_start lexbuf - !start)
+let info (lexbuf : LexBuffer<char>) =
+    let lexeme_start = lexbuf.StartPos.pos_cnum  // Lexing.lexeme_start lexbuf
+    createInfo !filename !lineno (lexeme_start - !start)
 
-let text = Lexing.lexeme
+let stringBuffer = System.Text.StringBuilder (2048)
 
-let stringBuffer = ref (String.create 2048)
-let stringEnd = ref 0
+let resetStr () : unit =
+    stringBuffer.Clear () |> ignore
 
-let resetStr () =
-    stringEnd := 0
-
-let addStr ch =
-    let x = !stringEnd
-    let buffer = !stringBuffer
-
-    if x = String.length buffer then
-        let newBuffer = String.create (x*2) in
-        String.blit buffer 0 newBuffer 0 x;
-        String.set newBuffer x ch;
-        stringBuffer := newBuffer;
-        stringEnd := x+1
-    else
-        String.set buffer x ch;
-        stringEnd := x+1
+let addStr (ch : char) =
+    stringBuffer.Append ch |> ignore
 
 let getStr () =
-    String.sub !stringBuffer 0 !stringEnd
+    stringBuffer.ToString ()
 
 let extractLineno yytext offset =
-    int_of_string (String.sub yytext offset (String.length yytext - offset))
+    Int32.Parse (String.sub yytext offset (String.length yytext - offset))
 
   (* The main body of the lexical analyzer *)
 }
@@ -140,31 +130,31 @@ rule main = parse
 | "/*" { depth := 1; startLex := info lexbuf; comment lexbuf; main lexbuf }
 
 | "# " ['0'-'9']+
-    { lineno := extractLineno (text lexbuf) 2 - 1; getFile lexbuf }
+    { lineno := extractLineno (lexeme lexbuf) 2 - 1; getFile lexbuf }
 
 | "# line " ['0'-'9']+
-    { lineno := extractLineno (text lexbuf) 7 - 1; getFile lexbuf }
+    { lineno := extractLineno (lexeme lexbuf) 7 - 1; getFile lexbuf }
 
 | ['0'-'9']+
-    { Parser.INTV{i=info lexbuf; v=int_of_string (text lexbuf)} }
+    { Parser.INTV{i=info lexbuf; v=int_of_string (lexeme lexbuf)} }
 
 | ['0'-'9']+ '.' ['0'-'9']+
-    { Parser.FLOATV{i=info lexbuf; v=float_of_string (text lexbuf)} }
+    { Parser.FLOATV{i=info lexbuf; v=float_of_string (lexeme lexbuf)} }
 
 | ['A'-'Z' 'a'-'z' '_']
   ['A'-'Z' 'a'-'z' '_' '0'-'9' '\'']*
-    { createID (info lexbuf) (text lexbuf) }
+    { createID (info lexbuf) (lexeme lexbuf) }
 
 | ":=" | "<:" | "<-" | "->" | "=>" | "==>"
 | "{|" | "|}" | "<|" | "|>" | "[|" | "|]" | "=="
-    { createID (info lexbuf) (text lexbuf) }
+    { createID (info lexbuf) (lexeme lexbuf) }
 
 | ['~' '%' '\\' '+' '-' '&' '|' ':' '@' '`' '$']+
-    { createID (info lexbuf) (text lexbuf) }
+    { createID (info lexbuf) (lexeme lexbuf) }
 
 | ['*' '#' '/' '!' '?' '^' '(' ')' '{' '}' '[' ']' '<' '>' '.' ';' '_' ','
    '=' '\'']
-    { createID (info lexbuf) (text lexbuf) }
+    { createID (info lexbuf) (lexeme lexbuf) }
 
 | "\"" { resetStr(); startLex := info lexbuf; string lexbuf }
 
@@ -188,17 +178,17 @@ and getFile = parse
 | " "* "\"" { getName lexbuf }
 
 and getName = parse
-| [^ '"' '\n']+ { filename := (text lexbuf); finishName lexbuf }
+| [^ '"' '\n']+ { filename := (lexeme lexbuf); finishName lexbuf }
 
 and finishName = parse
 | '"' [^ '\n']* { main lexbuf }
 
 and string = parse
-| '"'  { Parser.STRINGV {i = !startLex; v=getStr()} }
-| '\\' { addStr(escaped lexbuf); string lexbuf }
+| '"'  { Parser.STRINGV { i = !startLex; v = getStr(); } }
+| '\\' { addStr (escaped lexbuf); string lexbuf }
 | '\n' { addStr '\n'; newline lexbuf; string lexbuf }
 | eof  { error (!startLex) "String not terminated" }
-| _    { addStr (Lexing.lexeme_char lexbuf 0); string lexbuf }
+| _    { addStr (lexbuf.LexemeChar 0); string lexbuf }
 
 and escaped = parse
 | 'n'     { '\n' }
@@ -208,11 +198,11 @@ and escaped = parse
 | '\''     { '\'' }
 | ['0'-'9']['0'-'9']['0'-'9']
     {
-      let x = int_of_string(text lexbuf) in
+      let x = Int32.Parse (lexeme lexbuf)
       if x > 255 then
-    error (info lexbuf) "Illegal character constant"
+          error (info lexbuf) "Illegal character constant"
       else
-    Char.chr x
+          Char.chr x
     }
 | [^ '"' '\\' 't' 'n' '\'']
     { error (info lexbuf) "Illegal character constant" }

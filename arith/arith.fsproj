@@ -23,6 +23,8 @@
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <DocumentationFile>bin\Debug\arith.XML</DocumentationFile>
+    <NoWarn>62</NoWarn>
+    <StartArguments>"..\..\test.f"</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +60,7 @@
     </FsLex>
     <Compile Include="Core.fs" />
     <Compile Include="Program.fs" />
+    <None Include="test.f" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.PowerPack, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a19089b1c74d0809" />

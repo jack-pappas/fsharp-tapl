@@ -1,12 +1,15 @@
-﻿/*  
- *  Yacc grammar for the parser.  The files parser.mli and parser.ml
- *  are generated automatically from parser.mly.
+﻿/* TODO : Add copyright header */
+
+/*  
+ *  Yacc grammar for the parser.  The files parser.fsi and parser.fs
+ *  are generated automatically from parser.fsy.
  */
 
 %{
 
 //module Parser
 
+open Microsoft.FSharp.Compatibility.OCaml
 open Ast
 
 %}
@@ -82,11 +85,11 @@ open Ast
 /* ---------------------------------------------------------------------- */
 /* The starting production of the generated parser is the syntactic class
    toplevel.  The type that is returned when a toplevel is recognized is
-   Syntax.command list.
+   Ast.command list.
 */
 
 %start toplevel
-%type < Syntax.command list > toplevel
+%type < Ast.command list > toplevel
 %%
 
 /* ---------------------------------------------------------------------- */
@@ -105,8 +108,8 @@ toplevel :
 /* A top-level command */
 Command :
   | Term 
-      { (let t = $1 in
-            Eval (tmInfo t, t)) }
+      { let t = $1
+        Eval (tmInfo t, t) }
 
 Term :
   | AppTerm
@@ -126,7 +129,7 @@ AppTerm :
 
 /* Atomic terms are ones that never require extra parentheses */
 ATerm :
-  | LPAREN Term RPAREN  
+  | LPAREN Term RPAREN
       { $2 } 
   | TRUE
       { TmTrue ($1) }

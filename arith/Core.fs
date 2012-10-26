@@ -1,4 +1,6 @@
-﻿module Core
+﻿// TODO : Add copyright header
+
+module Core
 
 open Ast
 
@@ -9,7 +11,8 @@ exception NoRuleApplies
 
 let rec isnumericval = function
     | TmZero _ -> true
-    | TmSucc (_, t1) ->isnumericval t1
+    | TmSucc (_, t1) ->
+        isnumericval t1
     | _ -> false
 
 let rec isval = function
