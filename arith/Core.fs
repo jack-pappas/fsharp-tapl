@@ -1,5 +1,6 @@
 ﻿// TODO : Add copyright header
 
+/// Core typechecking and evaluation functions.
 module Core
 
 open Ast

@@ -59,7 +59,7 @@
       <OtherFlags>--unicode</OtherFlags>
     </FsLex>
     <Compile Include="Core.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Main.fs" />
     <None Include="test.f" />
   </ItemGroup>
   <ItemGroup>

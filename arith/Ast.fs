@@ -1,6 +1,6 @@
 ﻿// TODO : Add copyright header
 
-//
+/// Syntax trees and associated support functions.
 module Ast
 
 open Microsoft.FSharp.Compatibility.OCaml
@@ -24,14 +24,15 @@ type command =
 (* ---------------------------------------------------------------------- *)
 (* Extracting file info *)
 
-let tmInfo = function
+let tmInfo t =
+    match t with
     | TmTrue fi -> fi
     | TmFalse fi -> fi
-    | TmIf (fi,_,_,_) -> fi
+    | TmIf (fi, _, _, _) -> fi
     | TmZero fi -> fi
-    | TmSucc (fi,_) -> fi
-    | TmPred (fi,_) -> fi
-    | TmIsZero (fi,_) -> fi
+    | TmSucc (fi, _) -> fi
+    | TmPred (fi, _) -> fi
+    | TmIsZero (fi, _) -> fi
 
 
 (* ---------------------------------------------------------------------- *)
@@ -53,46 +54,61 @@ let tmInfo = function
 let obox0 () = () //open_hvbox 0
 let obox () = () //open_hvbox 2
 let cbox () = () //close_box()
-//let break () = () //print_break 0 0
+let ``break`` () = () //print_break 0 0
 
 let rec printtm_Term outer t =
     match t with
     | TmIf (fi, t1, t2, t3) ->
-       obox0();
-       pr "if ";
-       printtm_Term false t1;
-       //print_space();
-       pr "then ";
-       printtm_Term false t2;
-       //print_space();
-       pr "else ";
-       printtm_Term false t3;
-       cbox()
-    | t -> printtm_AppTerm outer t
+        obox0 ()
+        pr "if "
+        printtm_Term false t1
+        //print_space ()
+        pr "then "
+        printtm_Term false t2
+        //print_space ()
+        pr "else "
+        printtm_Term false t3
+        cbox ()
+    | t ->
+        printtm_AppTerm outer t
 
 and printtm_AppTerm outer t =
     match t with
-    | TmPred(_,t1) ->
-        pr "pred "; printtm_ATerm false t1
-    | TmIsZero(_,t1) ->
-       pr "iszero "; printtm_ATerm false t1
-    | t -> printtm_ATerm outer t
+    | TmPred (_, t1) ->
+        pr "pred "
+        printtm_ATerm false t1
+    | TmIsZero (_, t1) ->
+        pr "iszero "
+        printtm_ATerm false t1
+    | t ->
+        printtm_ATerm outer t
 
 and printtm_ATerm outer t =
     match t with
-    | TmTrue(_) -> pr "true"
-    | TmFalse(_) -> pr "false"
-    | TmZero(fi) ->
-       pr "0"
-    | TmSucc(_,t1) ->
-     let rec f n t =
-        match t with
-        | TmZero(_) -> pr (string_of_int n)
-        | TmSucc(_,s) -> f (n+1) s
-        | _ -> (pr "(succ "; printtm_ATerm false t1; pr ")")
-     in f 1 t1
-    | t -> pr "("; printtm_Term outer t; pr ")"
+    | TmTrue _ ->
+        pr "true"
+    | TmFalse _ ->
+        pr "false"
+    | TmZero fi ->
+        pr "0"
+    | TmSucc (_, t1) ->
+        let rec f n t =
+            match t with
+            | TmZero _ ->
+                pr (string_of_int n)
+            | TmSucc (_, s) ->
+                f (n + 1) s
+            | _ ->
+                pr "(succ "
+                printtm_ATerm false t1
+                pr ")"
 
+        f 1 t1
+    | t ->
+        pr "("
+        printtm_Term outer t
+        pr ")"
+  
 let printtm t =
-    printtm_Term true t 
-
+    printtm_Term true t
+  
