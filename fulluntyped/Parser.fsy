@@ -6,6 +6,12 @@
 %{
 open Microsoft.FSharp.Compatibility.OCaml
 open Ast
+
+// HACK : This works around a bug in the current version of FsYacc
+// (as of Oct-26-2012) where it doesn't correctly parse %type declarations
+// containing a function arrow ('->'). By creating an alias for the type,
+// we can use the alias for the %type declaration and it'll be parsed correctly.
+type Toplevel = Ast.context -> (Ast.command list * Ast.context)
 %}
 
 /* ---------------------------------------------------------------------- */
@@ -83,10 +89,10 @@ open Ast
 /* ---------------------------------------------------------------------- */
 /* The starting production of the generated parser is the syntactic class
    toplevel.  The type that is returned when a toplevel is recognized is
-     Syntax.context -> (Syntax.command list * Syntax.context) 
+     Ast.context -> (Ast.command list * Ast.context) 
    that is, the parser returns to the user program a function that,
    when given a naming context, returns a fully parsed list of
-   Syntax.commands and the new naming context that results when
+   Ast.commands and the new naming context that results when
    all the names bound in these commands are defined.
 
    All of the syntactic productions in the parser follow the same pattern:
@@ -97,7 +103,7 @@ open Ast
 */
 
 %start toplevel
-%type < Syntax.context -> (Syntax.command list * Syntax.context) > toplevel
+%type < Toplevel > toplevel
 %%
 
 /* ---------------------------------------------------------------------- */
@@ -169,7 +175,7 @@ PathTerm :
           TmProj($2, $1 ctx, $3.v) }
   | PathTerm DOT INTV
       { fun ctx ->
-          TmProj($2, $1 ctx, string_of_int $3.v) }
+          TmProj ($2, $1 ctx, string_of_int $3.v) }
   | ATerm
       { $1 }
 
@@ -178,25 +184,26 @@ ATerm :
     LPAREN Term RPAREN  
       { $2 } 
   | TRUE
-      { fun ctx -> TmTrue($1) }
+      { fun ctx -> TmTrue ($1) }
   | FALSE
-      { fun ctx -> TmFalse($1) }
+      { fun ctx -> TmFalse ($1) }
   | LCID 
       { fun ctx ->
-          TmVar($1.i, name2index $1.i ctx $1.v, ctxlength ctx) }
+          TmVar ($1.i, name2index $1.i ctx $1.v, ctxlength ctx) }
   | LCURLY Fields RCURLY
       { fun ctx ->
-          TmRecord($1, $2 ctx 1) }
+          TmRecord ($1, $2 ctx 1) }
   | FLOATV
-      { fun ctx -> TmFloat($1.i, $1.v) }
+      { fun ctx -> TmFloat ($1.i, $1.v) }
   | STRINGV
-      { fun ctx -> TmString($1.i, $1.v) }
+      { fun ctx -> TmString ($1.i, $1.v) }
   | INTV
       { fun ctx ->
-          let rec f n = match n with
-              0 -> TmZero($1.i)
-            | n -> TmSucc($1.i, f (n-1))
-          in f $1.v }
+          let rec f n =
+            match n with
+            | 0 -> TmZero ($1.i)
+            | n -> TmSucc ($1.i, f (n - 1))
+          f $1.v }
 
 Fields :
     /* empty */

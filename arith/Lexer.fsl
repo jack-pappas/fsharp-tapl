@@ -1,4 +1,11 @@
-﻿{
+﻿(*
+   The lexical analyzer: lexer.ml is generated automatically
+   from lexer.mll.
+
+   The only modification commonly needed here is adding new keywords to the
+   list of reserved words at the top.
+*)
+{
 // TODO : Add copyright header
 
 module Lexer
@@ -117,9 +124,10 @@ let getStr () =
 
 let extractLineno yytext offset =
     Int32.Parse (String.sub yytext offset (String.length yytext - offset))
-
-  (* The main body of the lexical analyzer *)
 }
+
+(* The main body of the lexical analyzer *)
+
 rule main = parse
 | [' ' '\009' '\012']+     { main lexbuf }
 
@@ -187,7 +195,7 @@ and string = parse
 | '"'  { Parser.STRINGV { i = !startLex; v = getStr(); } }
 | '\\' { addStr (escaped lexbuf); string lexbuf }
 | '\n' { addStr '\n'; newline lexbuf; string lexbuf }
-| eof  { error (!startLex) "String not terminated" }
+| eof  { error !startLex "String not terminated" }
 | _    { addStr (lexbuf.LexemeChar 0); string lexbuf }
 
 and escaped = parse

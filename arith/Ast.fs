@@ -48,7 +48,7 @@ let tmInfo t =
      break  Insert a breakpoint indicating where the line maybe broken if
             necessary.
   See the documentation for the Format module in the OCaml library for
-  more details. 
+  more details.
 *)
 
 let obox0 () = () //open_hvbox 0

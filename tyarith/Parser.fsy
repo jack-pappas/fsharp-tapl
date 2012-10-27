@@ -81,11 +81,11 @@ open Ast
 /* ---------------------------------------------------------------------- */
 /* The starting production of the generated parser is the syntactic class
    toplevel.  The type that is returned when a toplevel is recognized is
-   Syntax.command list.
+   Ast.command list.
 */
 
 %start toplevel
-%type < Syntax.command list > toplevel
+%type < Ast.command list > toplevel
 %%
 
 /* ---------------------------------------------------------------------- */
@@ -131,10 +131,11 @@ ATerm :
   | FALSE
       { TmFalse($1) }
   | INTV
-      { let rec f n = match n with
-              0 -> TmZero($1.i)
-            | n -> TmSucc($1.i, f (n-1))
-          in f $1.v }
+      { let rec f n =
+	        match n with
+            | 0 -> TmZero ($1.i)
+            | n -> TmSucc ($1.i, f (n - 1))
+        f $1.v }
 
 /* All type expressions */
 Type :

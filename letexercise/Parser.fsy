@@ -6,6 +6,12 @@
 %{
 open Microsoft.FSharp.Compatibility.OCaml
 open Ast
+
+// HACK : This works around a bug in the current version of FsYacc
+// (as of Oct-26-2012) where it doesn't correctly parse %type declarations
+// containing a function arrow ('->'). By creating an alias for the type,
+// we can use the alias for the %type declaration and it'll be parsed correctly.
+type Toplevel = Ast.context -> (Ast.command list * Ast.context)
 %}
 
 /* ---------------------------------------------------------------------- */
@@ -80,7 +86,7 @@ open Ast
 /* ---------------------------------------------------------------------- */
 /* The starting production of the generated parser is the syntactic class
    toplevel.  The type that is returned when a toplevel is recognized is
-     Syntax.context -> (Syntax.command list * Syntax.context) 
+     Ast.context -> (Ast.command list * Ast.context) 
    that is, the parser returns to the user program a function that,
    when given a naming context, returns a fully parsed list of
    Syntax.commands and the new naming context that results when
@@ -94,7 +100,7 @@ open Ast
 */
 
 %start toplevel
-%type < Syntax.context -> (Syntax.command list * Syntax.context) > toplevel
+%type < Toplevel > toplevel
 %%
 
 /* ---------------------------------------------------------------------- */
