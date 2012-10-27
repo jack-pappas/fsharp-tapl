@@ -120,10 +120,10 @@ let tmInfo t =
   more details. 
 *)
 
-let obox0 () = open_hvbox 0
-let obox () = open_hvbox 2
-let cbox () = close_box ()
-let ``break`` () = print_break 0 0
+let obox0 () = () //open_hvbox 0
+let obox () = () //open_hvbox 2
+let cbox () = () //close_box()
+let ``break`` () = () //print_break 0 0
   
 let small t = match t with | TmVar (_, _, _) -> true | _ -> false
   

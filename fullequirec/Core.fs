@@ -111,23 +111,23 @@ let rec simplifyty ctx tyT =
   try let tyT' = computety ctx tyT in simplifyty ctx tyT'
   with | NoRuleApplies -> tyT
   
-let rec tyeqv seen ctx tyS tyT =
+let rec private tyeqv' seen ctx tyS tyT =
   (List.mem (tyS, tyT) seen) ||
     (match (tyS, tyT) with
      | (TyString, TyString) -> true
      | (TyFloat, TyFloat) -> true
      | (TyRec (x, tyS1), _) ->
-         tyeqv ((tyS, tyT) :: seen) ctx (typeSubstTop tyS tyS1) tyT
+         tyeqv' ((tyS, tyT) :: seen) ctx (typeSubstTop tyS tyS1) tyT
      | (_, TyRec (x, tyT1)) ->
-         tyeqv ((tyS, tyT) :: seen) ctx tyS (typeSubstTop tyT tyT1)
+         tyeqv' ((tyS, tyT) :: seen) ctx tyS (typeSubstTop tyT tyT1)
      | (TyId b1, TyId b2) -> b1 = b2
      | (TyVar (i, _), _) when istyabb ctx i ->
-         tyeqv seen ctx (gettyabb ctx i) tyT
+         tyeqv' seen ctx (gettyabb ctx i) tyT
      | (_, TyVar (i, _)) when istyabb ctx i ->
-         tyeqv seen ctx tyS (gettyabb ctx i)
+         tyeqv' seen ctx tyS (gettyabb ctx i)
      | (TyVar (i, _), TyVar (j, _)) -> i = j
      | (TyArr (tyS1, tyS2), TyArr (tyT1, tyT2)) ->
-         (tyeqv seen ctx tyS1 tyT1) && (tyeqv seen ctx tyS2 tyT2)
+         (tyeqv' seen ctx tyS1 tyT1) && (tyeqv' seen ctx tyS2 tyT2)
      | (TyBool, TyBool) -> true
      | (TyNat, TyNat) -> true
      | (TyRecord fields1, TyRecord fields2) ->
@@ -136,19 +136,19 @@ let rec tyeqv seen ctx tyS tyT =
               (fun (li2, tyTi2) ->
                  try
                    let tyTi1 = List.assoc li2 fields1
-                   in tyeqv seen ctx tyTi1 tyTi2
+                   in tyeqv' seen ctx tyTi1 tyTi2
                  with | Not_found -> false)
               fields2)
      | (TyVariant fields1, TyVariant fields2) ->
          ((List.length fields1) = (List.length fields2)) &&
-           (List.for_all2
+           (List.forall2
               (fun (li1, tyTi1) (li2, tyTi2) ->
-                 (li1 = li2) && (tyeqv seen ctx tyTi1 tyTi2))
+                 (li1 = li2) && (tyeqv' seen ctx tyTi1 tyTi2))
               fields1 fields2)
      | (TyUnit, TyUnit) -> true
      | _ -> false)
   
-let tyeqv ctx tyS tyT = tyeqv [] ctx tyS tyT
+let tyeqv ctx tyS tyT = tyeqv' [] ctx tyS tyT
   
 (* ------------------------   TYPING  ------------------------ *)
 let rec typeof ctx t =

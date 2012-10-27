@@ -64,11 +64,13 @@ let prconstr constr =
   
 type nextuvar =
   | NextUVar of string * uvargenerator
-  and uvargenerator =
-  unit -> nextuvar
+
+and uvargenerator = unit -> nextuvar
 
 let uvargen =
-  let rec f n () = NextUVar ("?X" ^ (string_of_int n), f (n + 1)) in f 0
+    let rec f n () =
+        NextUVar ("?X" ^ (string_of_int n), f (n + 1))    
+    f 0
   
 let rec recon ctx nextuvar t =
   match t with

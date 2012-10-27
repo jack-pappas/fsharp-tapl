@@ -271,13 +271,10 @@ let tmInfo t =
   See the documentation for the Format module in the OCaml library for
   more details. 
 *)
-let obox0 () = open_hvbox 0
-  
-let obox () = open_hvbox 2
-  
-let cbox () = close_box ()
-  
-let break () = print_break 0 0
+let obox0 () = () //open_hvbox 0
+let obox () = () //open_hvbox 2
+let cbox () = () //close_box()
+let ``break`` () = () //print_break 0 0
   
 let small t = match t with | TmVar (_, _, _) -> true | _ -> false
   
@@ -290,7 +287,7 @@ and printkn_arrowkind outer ctx k =
        printkn_akind false ctx knK1;
        if outer then pr " " else ();
        pr "=>";
-       if outer then print_space () else break ();
+       if outer then print_space () else ``break`` ();
        printkn_arrowkind outer ctx knK2;
        cbox ())
   | knK -> printkn_akind outer ctx knK
@@ -325,7 +322,7 @@ let rec printty_Type outer ctx tyT =
          pr x';
          prokn ctx knK1;
          pr ".";
-         if outer then print_space () else break ();
+         if outer then print_space () else ``break`` ();
          printty_Type outer ctx' tyT2;
          cbox ())
   | tyT -> printty_ArrowType outer ctx tyT
@@ -336,7 +333,7 @@ and printty_ArrowType outer ctx tyT =
        printty_AppType false ctx tyT1;
        if outer then pr " " else ();
        pr "->";
-       if outer then print_space () else break ();
+       if outer then print_space () else ``break`` ();
        printty_ArrowType outer ctx tyT2;
        cbox ())
   | tyT -> printty_AppType outer ctx tyT
@@ -380,7 +377,7 @@ and printty_AType outer ctx tyT =
          | f :: rest ->
              (pf i f;
               pr ",";
-              if outer then print_space () else break ();
+              if outer then print_space () else ``break`` ();
               p (i + 1) rest))
       in (pr "{"; open_hovbox 0; p 1 fields; pr "}"; cbox ())
   | TyString -> pr "String"
@@ -395,7 +392,7 @@ and printty_AType outer ctx tyT =
          pr tyX;
          proty ctx tyT1;
          pr ",";
-         if outer then print_space () else break ();
+         if outer then print_space () else ``break`` ();
          printty_Type false ctx1 tyT2;
          pr "}";
          cbox ())
@@ -414,7 +411,7 @@ let rec printtm_Term outer ctx t =
          pr ":";
          printty_Type false ctx tyT1;
          pr ".";
-         if (small t2) && (not outer) then break () else print_space ();
+         if (small t2) && (not outer) then ``break`` () else print_space ();
          printtm_Term outer ctx' t2;
          cbox ())
   | TmIf (fi, t1, t2, t3) ->
@@ -449,7 +446,7 @@ let rec printtm_Term outer ctx t =
          pr x;
          proty ctx tyS;
          pr ".";
-         if (small t) && (not outer) then break () else print_space ();
+         if (small t) && (not outer) then ``break`` () else print_space ();
          printtm_Term outer ctx1 t;
          cbox ())
   | TmUnpack (fi, tyX, x, t1, t2) ->
@@ -535,7 +532,7 @@ and printtm_ATerm outer ctx t =
          | f :: rest ->
              (pf i f;
               pr ",";
-              if outer then print_space () else break ();
+              if outer then print_space () else ``break`` ();
               p (i + 1) rest))
       in (pr "{"; open_hovbox 0; p 1 fields; pr "}"; cbox ())
   | TmString (_, s) -> pr ("\"" ^ (s ^ "\""))
@@ -554,7 +551,7 @@ and printtm_ATerm outer ctx t =
        pr "{*";
        printty_Type false ctx tyT1;
        pr ",";
-       if outer then print_space () else break ();
+       if outer then print_space () else ``break`` ();
        printtm_Term false ctx t2;
        pr "}";
        print_space ();

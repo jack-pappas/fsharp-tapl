@@ -17,7 +17,7 @@ let rec addbinders tyT l =
     match l with
     | [] -> tyT
     | (tyX, k) :: rest ->
-	    TyAbs (tyX, k, addbinders tyT rest)
+        TyAbs (tyX, k, addbinders tyT rest)
 %}
 
 /* ---------------------------------------------------------------------- */
@@ -339,10 +339,11 @@ ATerm :
       { fun ctx -> TmFloat($1.i, $1.v) }
   | INTV
       { fun ctx ->
-          let rec f n = match n with
-              0 -> TmZero($1.i)
-            | n -> TmSucc($1.i, f (n-1))
-          in f $1.v }
+          let rec f n =
+              match n with
+              | 0 -> TmZero ($1.i)
+              | n -> TmSucc ($1.i, f (n-1))
+          f $1.v }
   | LCURLY STAR Type COMMA Term RCURLY AS Type
       { fun ctx ->
           TmPack($1,$3 ctx,$5 ctx,$8 ctx) }

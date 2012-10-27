@@ -195,10 +195,11 @@ ATerm :
       { fun ctx -> TmFalse($1) }
   | INTV
       { fun ctx ->
-          let rec f n = match n with
-              0 -> TmZero($1.i)
-            | n -> TmSucc($1.i, f (n-1))
-          in f $1.v }
+          let rec f n =
+              match n with
+              | 0 -> TmZero ($1.i)
+              | n -> TmSucc ($1.i, f (n-1))
+          f $1.v }
   | LCID 
       { fun ctx ->
           TmVar($1.i, name2index $1.i ctx $1.v, ctxlength ctx) }

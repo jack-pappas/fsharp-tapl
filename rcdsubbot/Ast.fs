@@ -126,13 +126,10 @@ let tmInfo t =
   See the documentation for the Format module in the OCaml library for
   more details. 
 *)
-let obox0 () = open_hvbox 0
-  
-let obox () = open_hvbox 2
-  
-let cbox () = close_box ()
-  
-let break () = print_break 0 0
+let obox0 () = () //open_hvbox 0
+let obox () = () //open_hvbox 2
+let cbox () = () //close_box()
+let ``break`` () = () //print_break 0 0
   
 let small t = match t with | TmVar (_, _, _) -> true | _ -> false
   
@@ -145,7 +142,7 @@ and printty_ArrowType outer tyT =
        printty_AType false tyT1;
        if outer then pr " " else ();
        pr "->";
-       if outer then print_space () else break ();
+       if outer then print_space () else ``break`` ();
        printty_ArrowType outer tyT2;
        cbox ())
   | tyT -> printty_AType outer tyT
@@ -162,7 +159,7 @@ and printty_AType outer tyT =
          | f :: rest ->
              (pf i f;
               pr ",";
-              if outer then print_space () else break ();
+              if outer then print_space () else ``break`` ();
               p (i + 1) rest))
       in (pr "{"; open_hovbox 0; p 1 fields; pr "}"; cbox ())
   | TyTop -> pr "Top"
@@ -182,7 +179,7 @@ let rec printtm_Term outer ctx t =
          pr ":";
          printty_Type false tyT1;
          pr ".";
-         if (small t2) && (not outer) then break () else print_space ();
+         if (small t2) && (not outer) then ``break`` () else print_space ();
          printtm_Term outer ctx' t2;
          cbox ())
   | t -> printtm_AppTerm outer ctx t
@@ -225,7 +222,7 @@ and printtm_ATerm outer ctx t =
          | f :: rest ->
              (pf i f;
               pr ",";
-              if outer then print_space () else break ();
+              if outer then print_space () else ``break`` ();
               p (i + 1) rest))
       in (pr "{"; open_hovbox 0; p 1 fields; pr "}"; cbox ())
   | t -> (pr "("; printtm_Term outer ctx t; pr ")")

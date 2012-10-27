@@ -180,9 +180,13 @@ let rec eval1 ctx store t =
   | _ -> raise NoRuleApplies
   
 let rec eval ctx store t =
-  try let (t', store') = eval1 ctx store t in eval ctx store' t'
-  with | NoRuleApplies -> (t, store)
-  | ErrorEncountered -> ((TmError dummyinfo), store)
+    try let (t', store') = eval1 ctx store t
+        eval ctx store' t'
+    with
+    | NoRuleApplies ->
+        (t, store)
+    | ErrorEncountered ->
+        (TmError dummyinfo), store
   
 (* ------------------------   KINDING  ------------------------ *)
 let istyabb ctx i =

@@ -205,9 +205,9 @@ and escaped = parse
     {
       let x = int_of_string(lexeme lexbuf) in
       if x > 255 then
-    error (info lexbuf) "Illegal character constant"
+        error (info lexbuf) "Illegal character constant"
       else
-    Char.chr x
+        Char.chr x
     }
 | [^ '"' '\\' 't' 'n' '\'']
     { error (info lexbuf) "Illegal character constant" }

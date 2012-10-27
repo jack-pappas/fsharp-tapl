@@ -31,19 +31,19 @@ let rec simplifyty ctx tyT =
   try let tyT' = computety ctx tyT in simplifyty ctx tyT'
   with | NoRuleApplies -> tyT
   
-let rec tyeqv seen ctx tyS tyT =
+let rec private tyeqv' seen ctx tyS tyT =
   (List.mem (tyS, tyT) seen) ||
     (match (tyS, tyT) with
      | (TyRec (x, tyS1), _) ->
-         tyeqv ((tyS, tyT) :: seen) ctx (typeSubstTop tyS tyS1) tyT
+         tyeqv' ((tyS, tyT) :: seen) ctx (typeSubstTop tyS tyS1) tyT
      | (_, TyRec (x, tyT1)) ->
-         tyeqv ((tyS, tyT) :: seen) ctx tyS (typeSubstTop tyT tyT1)
+         tyeqv' ((tyS, tyT) :: seen) ctx tyS (typeSubstTop tyT tyT1)
      | (TyId b1, TyId b2) -> b1 = b2
      | (TyArr (tyS1, tyS2), TyArr (tyT1, tyT2)) ->
-         (tyeqv seen ctx tyS1 tyT1) && (tyeqv seen ctx tyS2 tyT2)
+         (tyeqv' seen ctx tyS1 tyT1) && (tyeqv' seen ctx tyS2 tyT2)
      | _ -> false)
   
-let tyeqv ctx tyS tyT = tyeqv [] ctx tyS tyT
+let tyeqv ctx tyS tyT = tyeqv' [] ctx tyS tyT
   
 (* ------------------------   TYPING  ------------------------ *)
 let rec typeof ctx t =

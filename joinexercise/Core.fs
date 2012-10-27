@@ -65,10 +65,11 @@ let rec typeof ctx t =
   match t with
   | TmVar (fi, i, _) -> getTypeFromContext fi ctx i
   | TmAbs (fi, x, tyT1, t2) ->
-      let ctx' = addbinding ctx x (VarBind tyT1) in
-      let tyT2 = typeof ctx' t2 in TyArr (tyT1, tyT2)
+      let ctx' = addbinding ctx x (VarBind tyT1)
+      let tyT2 = typeof ctx' t2
+      TyArr (tyT1, tyT2)
   | TmApp (fi, t1, t2) ->
-      let tyT1 = typeof ctx t1 in
+      let tyT1 = typeof ctx t1
       let tyT2 = typeof ctx t2
       in
         (match tyT1 with
@@ -88,6 +89,6 @@ let rec typeof ctx t =
        | _ -> error fi "Expected record type")
   | TmTrue fi -> TyBool
   | TmFalse fi -> TyBool
-  | TmIf (fi, t1, t2, t3) -> (* write me *) assert false
+  | TmIf (fi, t1, t2, t3) -> raise <| System.NotImplementedException ()
   
 

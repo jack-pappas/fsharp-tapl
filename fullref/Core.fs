@@ -220,7 +220,7 @@ let rec tyeqv ctx tyS tyT =
              fields2)
     | (TyVariant fields1, TyVariant fields2) ->
         ((List.length fields1) = (List.length fields2)) &&
-          (List.for_all2
+          (List.forall2
              (fun (li1, tyTi1) (li2, tyTi2) ->
                 (li1 = li2) && (tyeqv ctx tyTi1 tyTi2))
              fields1 fields2)

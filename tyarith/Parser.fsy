@@ -132,7 +132,7 @@ ATerm :
       { TmFalse($1) }
   | INTV
       { let rec f n =
-	        match n with
+            match n with
             | 0 -> TmZero ($1.i)
             | n -> TmSucc ($1.i, f (n - 1))
         f $1.v }
