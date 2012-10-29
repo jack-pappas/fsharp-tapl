@@ -4,4 +4,4 @@ Types and Programming Languages in F#
 
 ---
 
-More information coming soon.
+**This is a work in progress.** Most functionality is complete, but there are a few annoying bugs that still need to be worked out before this code is ready for public consumption.
