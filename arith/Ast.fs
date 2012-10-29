@@ -3,7 +3,8 @@
 /// Syntax trees and associated support functions.
 module Ast
 
-open Microsoft.FSharp.Compatibility.OCaml
+//open FSharpx.Compatibility.OCaml
+open FSharpx.Compatibility.OCaml.Format
 
 
 (* ---------------------------------------------------------------------- *)
@@ -51,10 +52,10 @@ let tmInfo t =
   more details.
 *)
 
-let obox0 () = () //open_hvbox 0
-let obox () = () //open_hvbox 2
-let cbox () = () //close_box()
-let ``break`` () = () //print_break 0 0
+let obox0 () = open_hvbox 0
+let obox () = open_hvbox 2
+let cbox () = close_box ()
+let ``break`` () = print_break 0 0
 
 let rec printtm_Term outer t =
     match t with
@@ -62,10 +63,10 @@ let rec printtm_Term outer t =
         obox0 ()
         pr "if "
         printtm_Term false t1
-        //print_space ()
+        print_space ()
         pr "then "
         printtm_Term false t2
-        //print_space ()
+        print_space ()
         pr "else "
         printtm_Term false t3
         cbox ()

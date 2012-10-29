@@ -11,9 +11,9 @@ module Main
 
 open System
 open Microsoft.FSharp.Text
-open Microsoft.FSharp.Compatibility.OCaml
+//open Microsoft.FSharp.Compatibility.OCaml
 open Microsoft.FSharp.Text.Lexing
-//open Format
+open FSharpx.Compatibility.OCaml.Format
 open Ast
 open Lexer
 open Parser
@@ -68,15 +68,15 @@ let rec process_command cmd =
     | Eval (fi, t) ->
         let t' = eval t
         printtm_ATerm true t'
-        //force_newline ()
+        force_newline ()
   
 let process_file f =
     alreadyImported := f :: !alreadyImported
     let cmds = parseFile f
     let g c =
-        //open_hvbox 0
+        open_hvbox 0
         let results = process_command c
-        //print_flush ()
+        print_flush ()
         results
     List.iter g cmds
 
@@ -84,14 +84,14 @@ let main () =
     let inFile = parseArgs ()
     process_file inFile
 
-//set_max_boxes 1000
-//set_margin 67
+set_max_boxes 1000
+set_margin 67
 let res =
     try
         main ()
         0
     with (*Exit m*) _ ->
         2   // Per documentation for Printexc.catch
-//print_flush()
+print_flush ()
 exit res
 
