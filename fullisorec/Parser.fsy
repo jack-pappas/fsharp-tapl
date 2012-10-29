@@ -4,7 +4,6 @@
  */
 
 %{
-open Microsoft.FSharp.Compatibility.OCaml
 open Ast
 
 // HACK : This works around a bug in the current version of FsYacc

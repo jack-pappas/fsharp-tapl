@@ -13,7 +13,7 @@ module Lexer
 open System
 open Parser
 open Microsoft.FSharp.Text.Lexing
-open Microsoft.FSharp.Compatibility.OCaml
+open FSharpx.Compatibility.OCaml
 
 let lexeme lexbuf =
     LexBuffer<char>.LexemeString lexbuf

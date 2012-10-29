@@ -3,7 +3,7 @@
 /// Syntax trees and associated support functions.
 module Ast
 
-open Microsoft.FSharp.Compatibility.OCaml
+open FSharpx.Compatibility.OCaml.Format
 
 (* ---------------------------------------------------------------------- *)
 (* Datatypes *)

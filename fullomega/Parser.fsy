@@ -4,7 +4,6 @@
  */
 
 %{
-open Microsoft.FSharp.Compatibility.OCaml
 open Ast
 
 

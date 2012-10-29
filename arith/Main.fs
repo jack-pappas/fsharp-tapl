@@ -11,7 +11,6 @@ module Main
 
 open System
 open Microsoft.FSharp.Text
-//open Microsoft.FSharp.Compatibility.OCaml
 open Microsoft.FSharp.Text.Lexing
 open FSharpx.Compatibility.OCaml.Format
 open Ast
