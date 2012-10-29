@@ -11,6 +11,8 @@
     <AssemblyName>support</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>support</Name>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,7 +34,22 @@
     <DocumentationFile>bin\Release\support.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.PowerPack.Compatibility, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a19089b1c74d0809" />
+    <Reference Include="FSharp.PowerPack">
+      <HintPath>..\packages\FSPowerPack.Community.2.1.3.1\lib\Net40\FSharp.PowerPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FSharpx.Compatibility.OCaml">
+      <HintPath>..\packages\FSharpx.Compatibility.OCaml.0.1.5\lib\net40\FSharpx.Compatibility.OCaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FSharpx.Compatibility.OCaml.Format">
+      <HintPath>..\packages\FSharpx.Compatibility.OCaml.Format.0.1.5\lib\net40\FSharpx.Compatibility.OCaml.Format.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FSharpx.Compatibility.OCaml.System">
+      <HintPath>..\packages\FSharpx.Compatibility.OCaml.System.0.1.5\lib\net40\FSharpx.Compatibility.OCaml.System.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
@@ -40,6 +57,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <Compile Include="Error.fs" />
     <Compile Include="Pervasives.fs" />
     <Compile Include="AssemblyInfo.fs" />
