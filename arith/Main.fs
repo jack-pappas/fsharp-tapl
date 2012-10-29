@@ -45,7 +45,7 @@ let openfile infile =
         | d :: rest ->
             let name = if d = "" then infile else (d ^ "/" ^ infile)
             try open_in name
-            with (*Sys_error m*) _ ->
+            with Sys_error m ->
                 trynext rest
     trynext !searchpath
 
@@ -56,7 +56,7 @@ let parseFile inFile =
         try Parser.toplevel Lexer.main lexbuf
         with Parsing.Parse_error ->
             error (Lexer.info lexbuf) "Parse error"
-    //Parsing.clear_parser()
+    Parsing.clear_parser()
     close_in pi
     result
 
@@ -83,14 +83,13 @@ let main () =
     let inFile = parseArgs ()
     process_file inFile
 
-set_max_boxes 1000
-set_margin 67
-let res =
-    try
-        main ()
-        0
-    with (*Exit m*) _ ->
-        2   // Per documentation for Printexc.catch
-print_flush ()
-exit res
+let () = set_max_boxes 1000
+  
+let () = set_margin 67
+  
+let res = Printexc.catch (fun () -> try (main (); 0) with | Exit x -> x) ()
+  
+let () = print_flush ()
+  
+let () = exit res
 
