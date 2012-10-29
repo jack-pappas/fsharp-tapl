@@ -59,8 +59,8 @@ let index2name fi ctx x =
         xn
     with
     | Failure _ ->
-        let msg = sprintf "Variable lookup failure: offset: %d, ctx size: %d"
-        error fi (msg x (List.length ctx))
+        let msg = Printf.sprintf "Variable lookup failure: offset: %d, ctx size: %d" x (List.length ctx)
+        error fi msg
   
 let rec name2index fi ctx x =
     match ctx with
@@ -109,8 +109,8 @@ let rec getbinding fi ctx i =
     try let _, bind = List.nth ctx i
         bind
     with Failure _ ->
-        let msg = sprintf "Variable lookup failure: offset: %d, ctx size: %d"
-        error fi (msg i (List.length ctx))
+        let msg = Printf.sprintf "Variable lookup failure: offset: %d, ctx size: %d" i (List.length ctx)
+        error fi msg
   
 let getTypeFromContext fi ctx i =
     match getbinding fi ctx i with
