@@ -71,15 +71,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharpx.Compatibility.OCaml">
-      <HintPath>..\packages\FSharpx.Compatibility.OCaml.0.1.6\lib\net40\FSharpx.Compatibility.OCaml.dll</HintPath>
+      <HintPath>..\packages\FSharpx.Compatibility.OCaml.0.1.7\lib\net40\FSharpx.Compatibility.OCaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharpx.Compatibility.OCaml.Format">
-      <HintPath>..\packages\FSharpx.Compatibility.OCaml.Format.0.1.6\lib\net40\FSharpx.Compatibility.OCaml.Format.dll</HintPath>
+      <HintPath>..\packages\FSharpx.Compatibility.OCaml.Format.0.1.7\lib\net40\FSharpx.Compatibility.OCaml.Format.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharpx.Compatibility.OCaml.System">
-      <HintPath>..\packages\FSharpx.Compatibility.OCaml.System.0.1.6\lib\net40\FSharpx.Compatibility.OCaml.System.dll</HintPath>
+      <HintPath>..\packages\FSharpx.Compatibility.OCaml.System.0.1.7\lib\net40\FSharpx.Compatibility.OCaml.System.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
