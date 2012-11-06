@@ -184,10 +184,10 @@ let tmInfo t =
   See the documentation for the Format module in the OCaml library for
   more details. 
 *)
-let obox0 () = () //open_hvbox 0
-let obox () = () //open_hvbox 2
-let cbox () = () //close_box()
-let ``break`` () = () //print_break 0 0
+let obox0 () = open_hvbox 0
+let obox () = open_hvbox 2
+let cbox () = close_box()
+let ``break`` () = print_break 0 0
   
 let small t = match t with | TmVar (_, _, _) -> true | _ -> false
   
@@ -200,7 +200,7 @@ and printty_ArrowType outer ctx tyT =
        printty_AType false ctx tyT1;
        if outer then pr " " else ();
        pr "->";
-       //if outer then print_space () else ``break`` ();
+       if outer then print_space () else ``break`` ();
        if not outer then ``break`` ()
        printty_ArrowType outer ctx tyT2;
        cbox ())
@@ -238,17 +238,17 @@ let rec printtm_Term outer ctx t =
          pr ":";
          printty_Type false ctx tyT1;
          pr ".";
-         if (small t2) && (not outer) then ``break`` () //else print_space ();
+         if (small t2) && (not outer) then ``break`` () else print_space ();
          printtm_Term outer ctx' t2;
          cbox ())
   | TmIf (fi, t1, t2, t3) ->
       (obox0 ();
        pr "if ";
        printtm_Term false ctx t1;
-       //print_space ();
+       print_space ();
        pr "then ";
        printtm_Term false ctx t2;
-       //print_space ();
+       print_space ();
        pr "else ";
        printtm_Term false ctx t3;
        cbox ())
@@ -256,7 +256,7 @@ let rec printtm_Term outer ctx t =
       (obox0 ();
        pr "try ";
        printtm_Term false ctx t1;
-       //print_space ();
+       print_space ();
        pr "with ";
        printtm_Term false ctx t2;
        cbox ())
@@ -266,7 +266,7 @@ and printtm_AppTerm outer ctx t =
   | TmApp (fi, t1, t2) ->
       (obox0 ();
        printtm_AppTerm false ctx t1;
-       //print_space ();
+       print_space ();
        printtm_ATerm false ctx t2;
        cbox ())
   | t -> printtm_ATerm outer ctx t

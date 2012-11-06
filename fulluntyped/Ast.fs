@@ -155,10 +155,10 @@ let tmInfo t =
   See the documentation for the Format module in the OCaml library for
   more details. 
 *)
-let obox0 () = () //open_hvbox 0
-let obox () = () //open_hvbox 2
-let cbox () = () //close_box()
-let ``break`` () = () //print_break 0 0
+let obox0 () = open_hvbox 0
+let obox () = open_hvbox 2
+let cbox () = close_box()
+let ``break`` () = print_break 0 0
   
 let small t = match t with | TmVar (_, _, _) -> true | _ -> false
   
@@ -168,10 +168,10 @@ let rec printtm_Term outer ctx t =
       (obox0 ();
        pr "if ";
        printtm_Term false ctx t1;
-       //print_space ();
+       print_space ();
        pr "then ";
        printtm_Term false ctx t2;
-       //print_space ();
+       print_space ();
        pr "else ";
        printtm_Term false ctx t3;
        cbox ())
@@ -182,7 +182,7 @@ let rec printtm_Term outer ctx t =
          pr "lambda ";
          pr x';
          pr ".";
-         if (small t2) && (not outer) then ``break`` () //else print_space ()
+         if (small t2) && (not outer) then ``break`` () else print_space ()
          printtm_Term outer ctx' t2;
          cbox ())
   | TmLet (fi, x, t1, t2) ->
@@ -191,9 +191,9 @@ let rec printtm_Term outer ctx t =
        pr x;
        pr " = ";
        printtm_Term false ctx t1;
-       //print_space ();
+       print_space ();
        pr "in";
-       //print_space ();
+       print_space ();
        printtm_Term false (addname ctx x) t2;
        cbox ())
   | t -> printtm_AppTerm outer ctx t
@@ -202,7 +202,7 @@ and printtm_AppTerm outer ctx t =
   | TmApp (fi, t1, t2) ->
       (obox0 ();
        printtm_AppTerm false ctx t1;
-       //print_space ();
+       print_space ();
        printtm_ATerm false ctx t2;
        cbox ())
   | TmTimesfloat (_, t1, t2) ->
