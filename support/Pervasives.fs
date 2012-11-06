@@ -3,9 +3,11 @@
 [<AutoOpen>]
 module Support.Pervasives
 
+open FSharpx.Compatibility.OCaml
+
+
 type info = Error.info
 
+let pr = Format.print_string
 
-let pr (s : string) =
-    System.Console.WriteLine s
 
