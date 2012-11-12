@@ -1,4 +1,11 @@
-﻿// TODO : Add copyright header
+﻿(*
+Copyright (c) 2003, Benjamin C. Pierce
+Copyright (c) 2012, Jack Pappas
+All rights reserved.
+
+This code is provided under the terms of the 2-clause ("Simplified") BSD license.
+See LICENSE.TXT for licensing details.
+*)
 
 (* Module Main: The main program.  Deals with processing the command
    line, reading files, building and connecting lexers and parsers, etc.
