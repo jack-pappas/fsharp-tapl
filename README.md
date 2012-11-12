@@ -7,7 +7,7 @@ Types and Programming Languages in F#
 ### Overview ###
 [Types and Programming Languages](http://www.cis.upenn.edu/~bcpierce/tapl/) provides a comprehensive introduction to type systems and programming language theory. The code which accompanies the book is written in OCaml; this repository contains an F# port of that code.
 
-**NOTE:** The ported F# code is not a fresh implementation -- it is the *original* OCaml code with some trivial modifications which allow it to compile with F#. The output of each of the F# projects has been verified to match the [output of the original OCaml programs](blob/master/expected-output.md).
+**NOTE:** The ported F# code is not a fresh implementation -- it is the *original* OCaml code with some trivial modifications which allow it to compile with F#. The output of each of the F# projects has been verified to match the [output of the original OCaml programs](fsharp-tapl/blob/master/expected-output.md).
 
 ---
 ### Prerequisites ###
