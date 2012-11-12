@@ -12,10 +12,9 @@ Types and Programming Languages in F#
 ---
 ### Prerequisites ###
 
-- Compiler
+- F# compiler
     - Windows
         - Visual Studio 2010 or 2012
-
     - Mac OS X / FreeBSD / Linux
         - Mono 2.10.8+
         - [fsharp 3.0](https://github.com/fsharp/fsharp)
