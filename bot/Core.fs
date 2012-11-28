@@ -10,6 +10,7 @@ See LICENSE.TXT for licensing details.
 /// Core typechecking and evaluation functions.
 module Core
 
+open FSharp.Compatibility.OCaml
 open Ast
 
 

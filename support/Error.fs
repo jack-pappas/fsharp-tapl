@@ -11,7 +11,7 @@ See LICENSE.TXT for licensing details.
 module Support.Error
 
 open System
-open FSharpx.Compatibility.OCaml.Format
+open FSharp.Compatibility.OCaml.Format
 
 //
 exception Exit of int
