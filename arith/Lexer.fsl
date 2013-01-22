@@ -20,7 +20,7 @@ module Lexer
 open System
 open Parser
 open Microsoft.FSharp.Text.Lexing
-open FSharpx.Compatibility.OCaml
+open FSharp.Compatibility.OCaml
 
 let lexeme lexbuf =
     LexBuffer<char>.LexemeString lexbuf

@@ -10,7 +10,8 @@ See LICENSE.TXT for licensing details.
 /// Syntax trees and associated support functions.
 module Ast
 
-open FSharpx.Compatibility.OCaml.Format
+open FSharp.Compatibility.OCaml
+open FSharp.Compatibility.OCaml.Format
 
 (* ---------------------------------------------------------------------- *)
 (* Datatypes *)

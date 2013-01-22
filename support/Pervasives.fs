@@ -10,7 +10,7 @@ See LICENSE.TXT for licensing details.
 [<AutoOpen>]
 module Support.Pervasives
 
-open FSharpx.Compatibility.OCaml
+open FSharp.Compatibility.OCaml
 
 
 type info = Error.info

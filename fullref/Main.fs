@@ -19,7 +19,8 @@ module Main
 open System
 open Microsoft.FSharp.Text
 open Microsoft.FSharp.Text.Lexing
-open FSharpx.Compatibility.OCaml.Format
+open FSharp.Compatibility.OCaml
+open FSharp.Compatibility.OCaml.Format
 open Ast
 open Lexer
 open Parser
