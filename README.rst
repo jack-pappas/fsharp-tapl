@@ -40,9 +40,11 @@ Prerequisites
 
   Once NuGet is installed and configured, you should be able to build the solution.
 
-- `F# PowerPack 2.0`_
+- `F# PowerPack 2.0`_ (GitHub_)
 
-  The F# PowerPack 2.0 is required (for now) because the projects use ``fslex`` and ``fsyacc``. **Mono:** The PowerPack should work on Mono, though I haven't tested it. I'm working on new versions of ``fslex`` and ``fsyacc`` now, and when complete I'll create install scripts to make them easy to use on Mac OS X / FreeBSD / Linux.
+  The F# PowerPack 2.0 is required (for now) because the projects use ``fslex`` and ``fsyacc``. If you're running Windows, you should install the PowerPack from the installer on CodePlex (link above); otherwise, build and install the sources from the GitHub repository.
+
+  On a related note, I'm working on replacements for ``fslex`` and ``fsyacc`` (see my `fsharp-tools`_ repository); they're not quite ready to use yet, but once they are I'll modify the TAPL projects to use my replacements (``fsharplex`` and ``fsharpyacc``) instead.
 
 .. _`fsharp 3.0`: https://github.com/fsharp/fsharp
 .. _fsharpbinding: https://github.com/fsharp/fsharpbinding
@@ -51,4 +53,5 @@ Prerequisites
 .. _`Visual Studio Extension Gallery`: http://visualstudiogallery.msdn.microsoft.com/27077b70-9dad-4c64-adcf-c7cf6bc9970c
 .. _`Allow NuGet to download missing packages during build`: http://docs.nuget.org/docs/workflows/using-nuget-without-committing-packages
 .. _`F# PowerPack 2.0`: https://fsharppowerpack.codeplex.com/releases/view/45593
-
+.. _GitHub: https://github.com/fsharp/powerpack
+.. _`fsharp-tools`: https://github.com/jack-pappas/fsharp-tools
