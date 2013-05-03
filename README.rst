@@ -34,7 +34,7 @@ Prerequisites
 
       - fsharpbinding_
   
-- NuGet_ is used to manage external packages. The easiest way to `install NuGet`_ is by downloading it (for free) from the `Visual Studio Extension Gallery`_. If you do not have NuGet, or are running a version prior to 2.0, you *must* install it (or upgrade) before you will be able to build the projects.
+- NuGet_ is used to manage external packages. The easiest way to `install NuGet`_ is by downloading it (for free) from the `Visual Studio Extension Gallery`_. If you do not have NuGet, or are running a version prior to 2.5, you *must* install it (or upgrade) before you will be able to build the projects.
 
   The solution uses the *Package Restore* feature of NuGet to automatically download any missing packages when the project is built. This requires that you have the `Allow NuGet to download missing packages during build`_ setting enabled; in Visual Studio, you can find the setting under ``Options -> Package Manager -> General``.
 
